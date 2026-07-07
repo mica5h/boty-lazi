@@ -15,7 +15,7 @@ npm install
 npm start          # or: npm run dev  (auto-restart on changes)
 ```
 
-Then open http://localhost:3000
+Then open http://localhost:8080 (or http://localhost:3000 with `npm run dev`)
 
 ## Access
 
@@ -23,9 +23,9 @@ Defaults (override with environment variables):
 
 | What            | Default      | Env var          |
 |-----------------|--------------|------------------|
-| Gallery code    | `SHOES2026`  | `ACCESS_CODE`    |
-| Admin password  | `admin123`   | `ADMIN_PASSWORD` |
-| Port            | `3000`       | `PORT`           |
+| Gallery code    | `BotyLazi`   | `ACCESS_CODE`    |
+| Admin password  | `Lazi123`    | `ADMIN_PASSWORD` |
+| Port            | `8080`       | `PORT`           |
 | Session secret  | `change-me…` | `SESSION_SECRET` |
 
 Example:
