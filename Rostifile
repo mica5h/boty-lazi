@@ -1,0 +1,37 @@
+version: 1
+name: boty-lazi
+technology: node
+https: true
+domains:
+  - boty-lazi.rostiapp.cz
+source_path: .
+plan: start
+
+# Runtime image (provides the Node.js version). Run `rostictl runtimes` to see
+# valid tags and pick one with Node 18+. Leave commented to use the default.
+# runtime: rosti/runtime:2024.xx-x
+
+# Supervisor-managed process. Rosti's Nginx proxies to :8080, which server.js
+# listens on by default (see config.js).
+processes:
+  - name: app
+    command: /srv/bin/primary_tech/node /srv/app/server.js
+
+# Install production dependencies on each deploy.
+before_commands:
+  - cd /srv/app && /srv/bin/primary_tech/npm install --omit=dev
+
+# Restart the app process after code is uploaded.
+after_commands:
+  - supervisorctl restart app
+
+# Never upload these. uploads/ and data/ are excluded so redeploys never
+# clobber shoe records or photos already on the server.
+exclude:
+  - .git
+  - .idea
+  - node_modules
+  - .screenshots
+  - uploads
+  - data
+  - rostictl

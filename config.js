@@ -1,6 +1,8 @@
 // Central configuration. Override any of these with environment variables.
 export const config = {
-  port: process.env.PORT || 3000,
+  // Rosti.cz proxies to an HTTP server on 8080, so that is the default.
+  // Locally, `npm run dev` sets PORT=3000.
+  port: process.env.PORT || 8080,
 
   // Code visitors must enter to view the gallery.
   accessCode: process.env.ACCESS_CODE || "BotyLazi",
