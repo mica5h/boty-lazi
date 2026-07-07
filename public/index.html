@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>boty-lazi · Shoe gallery</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>👟 boty-lazi</h1>
+      <nav>
+        <a href="/admin" id="adminLink" hidden>Admin</a>
+        <a href="/logout">Log out</a>
+      </nav>
+    </header>
+
+    <main>
+      <p id="empty" class="muted center" hidden>
+        No shoes yet. Add some from the <a href="/admin">admin panel</a>.
+      </p>
+      <section id="gallery" class="gallery"></section>
+    </main>
+
+    <!-- Lightbox for viewing a shoe's photos + details -->
+    <div id="lightbox" class="lightbox" hidden>
+      <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+      <div class="lb-content">
+        <div class="lb-main">
+          <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous">‹</button>
+          <img id="lbImg" alt="" />
+          <button class="lb-nav lb-next" id="lbNext" aria-label="Next">›</button>
+        </div>
+        <div class="lb-thumbs" id="lbThumbs"></div>
+        <div class="lb-info" id="lbInfo"></div>
+      </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

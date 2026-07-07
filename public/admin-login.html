@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>boty-lazi · Admin login</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body class="lock-body">
+    <main class="lock-card">
+      <h1>🔒 Admin</h1>
+      <p class="muted">Enter the admin password to manage shoes.</p>
+      <form method="POST" action="/admin/login">
+        <input
+          type="password"
+          name="password"
+          placeholder="Admin password"
+          autofocus
+          required
+        />
+        <button type="submit">Log in</button>
+      </form>
+      <p id="err" class="error" hidden>Wrong password — try again.</p>
+      <p class="muted small"><a href="/login">← Back to gallery</a></p>
+    </main>
+    <script>
+      if (new URLSearchParams(location.search).has("error"))
+        document.getElementById("err").hidden = false;
+    </script>
+  </body>
+</html>

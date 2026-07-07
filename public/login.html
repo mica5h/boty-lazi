@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>boty-lazi · Enter access code</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body class="lock-body">
+    <main class="lock-card">
+      <h1>👟 boty-lazi</h1>
+      <p class="muted">This gallery is locked. Enter your access code.</p>
+      <form method="POST" action="/login">
+        <input
+          type="password"
+          name="code"
+          placeholder="Access code"
+          autofocus
+          required
+        />
+        <button type="submit">Unlock gallery</button>
+      </form>
+      <p id="err" class="error" hidden>Wrong code — try again.</p>
+      <p class="muted small"><a href="/admin/login">Admin login →</a></p>
+    </main>
+    <script>
+      if (new URLSearchParams(location.search).has("error"))
+        document.getElementById("err").hidden = false;
+    </script>
+  </body>
+</html>
