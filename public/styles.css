@@ -13,6 +13,9 @@
 
 * { box-sizing: border-box; }
 
+/* The [hidden] attribute must win over display rules like .lightbox{display:grid}. */
+[hidden] { display: none !important; }
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
