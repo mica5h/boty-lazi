@@ -1,4 +1,4 @@
-# 👟 boty-lazi
+# 👟 botylazi
 
 A locked shoe gallery. Each shoe is shown as a card with up to 8 photos, a
 title and meta (brand, size, color, price, description). Visitors need an

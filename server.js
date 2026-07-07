@@ -231,7 +231,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(config.port, () => {
-  console.log(`boty-lazi gallery running at http://localhost:${config.port}`);
+  console.log(`botylazi gallery running at http://localhost:${config.port}`);
   console.log(`  Gallery access code : ${config.accessCode}`);
   console.log(`  Admin password      : ${config.adminPassword}`);
 });

@@ -1,9 +1,9 @@
 version: 1
-name: boty-lazi
+name: botylazi
 technology: node
 https: true
 domains:
-  - boty-lazi.rostiapp.cz
+  - botylazi.rostiapp.cz
 source_path: .
 plan: start
 
