@@ -21,8 +21,10 @@
         <button type="submit">Odemknout galerii</button>
       </form>
       <p id="err" class="error" hidden>Špatný kód — zkuste to znovu.</p>
-      <p class="muted small"><a href="/admin/login">Přihlášení do administrace →</a></p>
     </main>
+    <!-- Camouflaged admin link: same color as the background, revealed only
+         when text is selected (e.g. Ctrl+A). -->
+    <a href="/admin/login" class="stealth-link">Přihlášení do administrace</a>
     <script>
       if (new URLSearchParams(location.search).has("error"))
         document.getElementById("err").hidden = false;

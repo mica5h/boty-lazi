@@ -52,6 +52,23 @@ a:hover { text-decoration: underline; }
 .lock-card form { display: grid; gap: 0.75rem; margin-top: 1.25rem; }
 .error { color: var(--danger); }
 
+/* Camouflaged admin link — pinned to the bottom-right corner, painted the same
+   color as the page background so it's invisible until you select the text
+   (e.g. Ctrl+A), which swaps in a readable ::selection color. */
+.stealth-link {
+  position: fixed;
+  right: 0.6rem;
+  bottom: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--bg);
+  text-decoration: none;
+}
+.stealth-link:hover { text-decoration: none; }
+.stealth-link::selection {
+  color: var(--accent);
+  background: rgba(108, 140, 255, 0.25);
+}
+
 /* ---- Inputs & buttons ---------------------------------------------------- */
 input,
 textarea,
