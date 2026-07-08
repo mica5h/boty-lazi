@@ -5,7 +5,7 @@ https: true
 domains:
   - botylazi-9114.rostiapp.cz
 source_path: .
-plan: start
+plan: standard
 
 # Runtime image (provides the Node.js version). Run `rostictl runtimes` to see
 # valid tags and pick one with Node 18+. Leave commented to use the default.
