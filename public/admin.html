@@ -1,55 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>botylazi · Admin</title>
+    <title>botylazi · Administrace</title>
     <link rel="stylesheet" href="/static/styles.css" />
   </head>
   <body>
     <header class="topbar">
-      <h1>🔧 Admin · botylazi</h1>
+      <h1>🔧 Administrace · botylazi</h1>
       <nav>
-        <a href="/">View gallery</a>
-        <a href="/logout">Log out</a>
+        <a href="/">Zobrazit galerii</a>
+        <a href="/logout">Odhlásit se</a>
       </nav>
     </header>
 
     <main class="admin">
       <section class="panel">
-        <h2 id="formTitle">Add a shoe</h2>
+        <h2 id="formTitle">Přidat botu</h2>
         <form id="shoeForm">
           <input type="hidden" name="id" />
-          <label>Title <input name="title" required /></label>
+          <label>Název <input name="title" required /></label>
           <div class="grid2">
-            <label>Brand <input name="brand" /></label>
-            <label>Size <input name="size" placeholder="e.g. 42 / US 9" /></label>
-            <label>Color <input name="color" /></label>
-            <label>Price <input name="price" placeholder="e.g. €120" /></label>
+            <label>Značka <input name="brand" /></label>
+            <label>Velikost <input name="size" placeholder="např. 42 / US 9" /></label>
+            <label>Barva <input name="color" /></label>
+            <label>Cena <input name="price" placeholder="např. 120 Kč" /></label>
           </div>
-          <label>Description
+          <label>Popis
             <textarea name="description" rows="3"></textarea>
           </label>
-          <label>Photos (up to 8)
+          <label>Fotky (až 8)
             <input type="file" name="photos" accept="image/*" multiple />
           </label>
 
           <!-- Existing photos shown when editing -->
           <div id="existing" class="existing" hidden>
-            <p class="muted small">Existing photos (click ✕ to remove):</p>
+            <p class="muted small">Stávající fotky (klikněte na ✕ pro odebrání):</p>
             <div id="existingList" class="existing-list"></div>
           </div>
 
           <div class="actions">
-            <button type="submit" id="saveBtn">Save shoe</button>
-            <button type="button" id="cancelBtn" class="ghost" hidden>Cancel</button>
+            <button type="submit" id="saveBtn">Uložit botu</button>
+            <button type="button" id="cancelBtn" class="ghost" hidden>Zrušit</button>
           </div>
           <p id="msg" class="msg" hidden></p>
         </form>
       </section>
 
       <section class="panel">
-        <h2>Shoes</h2>
+        <h2>Boty</h2>
         <div id="adminList" class="admin-list"></div>
       </section>
     </main>

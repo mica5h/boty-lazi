@@ -1,35 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>botylazi · Shoe gallery</title>
+    <title>botylazi · Galerie bot</title>
     <link rel="stylesheet" href="/static/styles.css" />
   </head>
   <body>
     <header class="topbar">
       <h1>👟 botylazi</h1>
       <nav>
-        <a href="/admin" id="adminLink" hidden>Admin</a>
-        <a href="/logout">Log out</a>
+        <a href="/admin" id="adminLink" hidden>Administrace</a>
+        <a href="/logout">Odhlásit se</a>
       </nav>
     </header>
 
     <main>
       <p id="empty" class="muted center" hidden>
-        No shoes yet. Add some from the <a href="/admin">admin panel</a>.
+        Zatím žádné boty. Přidejte je v <a href="/admin">administraci</a>.
       </p>
       <section id="gallery" class="gallery"></section>
     </main>
 
     <!-- Lightbox for viewing a shoe's photos + details -->
     <div id="lightbox" class="lightbox" hidden>
-      <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+      <button class="lb-close" id="lbClose" aria-label="Zavřít">✕</button>
       <div class="lb-content">
         <div class="lb-main">
-          <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous">‹</button>
+          <button class="lb-nav lb-prev" id="lbPrev" aria-label="Předchozí">‹</button>
           <img id="lbImg" alt="" />
-          <button class="lb-nav lb-next" id="lbNext" aria-label="Next">›</button>
+          <button class="lb-nav lb-next" id="lbNext" aria-label="Další">›</button>
         </div>
         <div class="lb-thumbs" id="lbThumbs"></div>
         <div class="lb-info" id="lbInfo"></div>

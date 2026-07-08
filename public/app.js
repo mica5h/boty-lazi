@@ -19,7 +19,7 @@ function cardHtml(shoe) {
   const photos = shoe.photos || [];
   const cover = photos[0]
     ? `<img src="/uploads/${esc(photos[0])}" alt="${esc(shoe.title)}" loading="lazy" />`
-    : `<div class="noimg">No photo</div>`;
+    : `<div class="noimg">Bez fotky</div>`;
 
   const thumbs = photos
     .slice(1, 4)
@@ -39,9 +39,9 @@ function cardHtml(shoe) {
         <h2>${esc(shoe.title)}</h2>
         ${shoe.brand ? `<div class="brand">${esc(shoe.brand)}</div>` : ""}
         <div class="metas">
-          ${metaRow("Size", shoe.size)}
-          ${metaRow("Color", shoe.color)}
-          ${metaRow("Price", shoe.price)}
+          ${metaRow("Velikost", shoe.size)}
+          ${metaRow("Barva", shoe.color)}
+          ${metaRow("Cena", shoe.price)}
         </div>
         ${shoe.description ? `<p class="desc">${esc(shoe.description)}</p>` : ""}
       </div>
@@ -85,9 +85,9 @@ function openLightbox(id) {
     <h2>${esc(shoe.title)}</h2>
     ${shoe.brand ? `<div class="brand">${esc(shoe.brand)}</div>` : ""}
     <div class="metas">
-      ${metaRow("Size", shoe.size)}
-      ${metaRow("Color", shoe.color)}
-      ${metaRow("Price", shoe.price)}
+      ${metaRow("Velikost", shoe.size)}
+      ${metaRow("Barva", shoe.color)}
+      ${metaRow("Cena", shoe.price)}
     </div>
     ${shoe.description ? `<p class="desc">${esc(shoe.description)}</p>` : ""}`;
 

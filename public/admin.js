@@ -32,7 +32,7 @@ async function loadList() {
   }
   const shoes = await res.json();
   if (!shoes.length) {
-    listEl.innerHTML = `<p class="muted">No shoes yet.</p>`;
+    listEl.innerHTML = `<p class="muted">Zatím žádné boty.</p>`;
     return;
   }
   listEl.innerHTML = shoes
@@ -50,11 +50,11 @@ async function loadList() {
           <b>${esc(s.title)}</b>
           <span class="muted small">${esc(s.brand || "")} ·
             ${esc(s.size || "?")} · ${esc(s.color || "?")} ·
-            ${(s.photos || []).length} photo(s)</span>
+            ${(s.photos || []).length} fotek</span>
         </div>
         <div class="admin-actions">
-          <button class="edit" data-id="${esc(s.id)}">Edit</button>
-          <button class="del ghost" data-id="${esc(s.id)}">Delete</button>
+          <button class="edit" data-id="${esc(s.id)}">Upravit</button>
+          <button class="del ghost" data-id="${esc(s.id)}">Smazat</button>
         </div>
       </div>`
     )
@@ -80,7 +80,7 @@ async function startEdit(id) {
   form.price.value = s.price || "";
   form.description.value = s.description || "";
 
-  formTitle.textContent = "Edit shoe";
+  formTitle.textContent = "Upravit botu";
   cancelBtn.hidden = false;
   renderExisting(id, s.photos || []);
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -108,7 +108,7 @@ function renderExisting(id, photos) {
 }
 
 async function removePhoto(id, photo) {
-  if (!confirm("Remove this photo?")) return;
+  if (!confirm("Odebrat tuto fotku?")) return;
   const res = await fetch(`/api/shoes/${id}/photos`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
@@ -123,7 +123,7 @@ function resetForm() {
   editingId = null;
   form.reset();
   form.id.value = "";
-  formTitle.textContent = "Add a shoe";
+  formTitle.textContent = "Přidat botu";
   cancelBtn.hidden = true;
   existingBox.hidden = true;
   existingList.innerHTML = "";
@@ -142,23 +142,23 @@ form.addEventListener("submit", async (e) => {
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    showMsg(err.error || "Save failed", false);
+    showMsg(err.error || "Uložení se nezdařilo", false);
     return;
   }
-  showMsg(editingId ? "Shoe updated." : "Shoe added.");
+  showMsg(editingId ? "Bota upravena." : "Bota přidána.");
   resetForm();
   loadList();
 });
 
 async function del(id) {
-  if (!confirm("Delete this shoe and all its photos?")) return;
+  if (!confirm("Smazat tuto botu a všechny její fotky?")) return;
   const res = await fetch("/api/shoes/" + id, { method: "DELETE" });
   if (res.ok) {
-    showMsg("Shoe deleted.");
+    showMsg("Bota smazána.");
     if (editingId === id) resetForm();
     loadList();
   } else {
-    showMsg("Delete failed", false);
+    showMsg("Smazání se nezdařilo", false);
   }
 }
 

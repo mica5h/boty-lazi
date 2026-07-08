@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>botylazi · Enter access code</title>
+    <title>botylazi · Zadejte přístupový kód</title>
     <link rel="stylesheet" href="/static/styles.css" />
   </head>
   <body class="lock-body">
     <main class="lock-card">
       <h1>👟 botylazi</h1>
-      <p class="muted">This gallery is locked. Enter your access code.</p>
+      <p class="muted">Tato galerie je uzamčená. Zadejte svůj přístupový kód.</p>
       <form method="POST" action="/login">
         <input
           type="password"
           name="code"
-          placeholder="Access code"
+          placeholder="Přístupový kód"
           autofocus
           required
         />
-        <button type="submit">Unlock gallery</button>
+        <button type="submit">Odemknout galerii</button>
       </form>
-      <p id="err" class="error" hidden>Wrong code — try again.</p>
-      <p class="muted small"><a href="/admin/login">Admin login →</a></p>
+      <p id="err" class="error" hidden>Špatný kód — zkuste to znovu.</p>
+      <p class="muted small"><a href="/admin/login">Přihlášení do administrace →</a></p>
     </main>
     <script>
       if (new URLSearchParams(location.search).has("error"))

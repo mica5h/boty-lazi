@@ -65,7 +65,7 @@ const storage = multer.diskStorage({
 });
 function imageFilter(req, file, cb) {
   if (/^image\//.test(file.mimetype)) cb(null, true);
-  else cb(new Error("Only image files are allowed"));
+  else cb(new Error("Povoleny jsou pouze obrázky"));
 }
 const upload = multer({
   storage,
