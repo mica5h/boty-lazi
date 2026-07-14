@@ -21,20 +21,9 @@ function cardHtml(shoe) {
     ? `<img src="/uploads/${esc(photos[0])}" alt="${esc(shoe.title)}" loading="lazy" />`
     : `<div class="noimg">Bez fotky</div>`;
 
-  const thumbs = photos
-    .slice(1, 4)
-    .map(
-      (p) =>
-        `<img src="/uploads/${esc(p)}" alt="" loading="lazy" />`
-    )
-    .join("");
-  const more =
-    photos.length > 4 ? `<span class="more">+${photos.length - 4}</span>` : "";
-
   return `
     <article class="card" data-id="${esc(shoe.id)}">
       <div class="cover">${cover}</div>
-      ${thumbs ? `<div class="thumbs">${thumbs}${more}</div>` : ""}
       <div class="body">
         <h2>${esc(shoe.title)}</h2>
         ${shoe.brand ? `<div class="brand">${esc(shoe.brand)}</div>` : ""}
