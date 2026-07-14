@@ -4,8 +4,13 @@ export const config = {
   // Locally, `npm run dev` sets PORT=3000.
   port: process.env.PORT || 8080,
 
-  // Code visitors must enter to view the gallery.
+  // Code visitors must enter to view the gallery (real prices).
   accessCode: process.env.ACCESS_CODE || "BotyLazi",
+
+  // Alternative gallery code. Visitors who enter this code see the same
+  // gallery, but every price is marked up by `priceMarkupPercent`.
+  markupCode: process.env.MARKUP_CODE || "BotyLaziPlus",
+  priceMarkupPercent: Number(process.env.PRICE_MARKUP_PERCENT || 10),
 
   // Password to reach the admin panel (upload / edit / delete).
   adminPassword: process.env.ADMIN_PASSWORD || "Lazi123",

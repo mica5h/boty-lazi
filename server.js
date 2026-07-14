@@ -82,8 +82,15 @@ app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "login.html"));
 });
 app.post("/login", (req, res) => {
-  if ((req.body.code || "").trim() === config.accessCode) {
+  const code = (req.body.code || "").trim();
+  if (code === config.accessCode) {
     req.session.gallery = true;
+    req.session.markup = false;
+    return res.redirect("/");
+  }
+  if (code === config.markupCode) {
+    req.session.gallery = true;
+    req.session.markup = true; // sees prices marked up by priceMarkupPercent
     return res.redirect("/");
   }
   res.redirect("/login?error=1");
@@ -113,20 +120,52 @@ app.get("/admin", requireAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "admin.html"));
 });
 
+// ---- Price markup ----------------------------------------------------------
+// Bump the numeric part of a free-text price string by `percent`, keeping any
+// currency symbols / surrounding text intact. e.g. ("€139", 10) -> "€153".
+// Supports space-grouped thousands and a single . or , decimal separator.
+function markupPrice(price, percent) {
+  const str = String(price ?? "");
+  const factor = 1 + percent / 100;
+  const m = str.match(/\d{1,3}(?:[  ]\d{3})+(?:[.,]\d+)?|\d+(?:[.,]\d+)?/);
+  if (!m) return str;
+  const token = m[0];
+  const dec = token.match(/[.,](\d+)$/);
+  const decLen = dec ? dec[1].length : 0;
+  const decSep = dec ? token[dec.index] : ".";
+  const numeric = Number(token.replace(/[  ]/g, "").replace(",", "."));
+  if (!isFinite(numeric)) return str;
+  const bumped = decLen
+    ? (numeric * factor).toFixed(decLen).replace(".", decSep)
+    : String(Math.round(numeric * factor));
+  return str.slice(0, m.index) + bumped + str.slice(m.index + token.length);
+}
+
+// Apply the session's price markup (skip for admins, who see real prices).
+function priceView(req, shoe) {
+  if (!shoe || !req.session.markup || req.session.admin) return shoe;
+  return { ...shoe, price: markupPrice(shoe.price, config.priceMarkupPercent) };
+}
+
 // ---- API -------------------------------------------------------------------
 // Public (gallery-gated) read.
 app.get("/api/shoes", requireGallery, async (req, res) => {
-  res.json(await listShoes());
+  const shoes = await listShoes();
+  res.json(shoes.map((s) => priceView(req, s)));
 });
 app.get("/api/shoes/:id", requireGallery, async (req, res) => {
   const shoe = await getShoe(req.params.id);
   if (!shoe) return res.status(404).json({ error: "Not found" });
-  res.json(shoe);
+  res.json(priceView(req, shoe));
 });
 
 // Tells the admin UI whether the current session is an admin.
 app.get("/api/me", (req, res) => {
-  res.json({ gallery: !!req.session.gallery, admin: !!req.session.admin });
+  res.json({
+    gallery: !!req.session.gallery,
+    admin: !!req.session.admin,
+    markup: !!req.session.markup,
+  });
 });
 
 // Create a shoe (with optional photos).
@@ -233,5 +272,8 @@ app.use((err, req, res, next) => {
 app.listen(config.port, () => {
   console.log(`botylazi gallery running at http://localhost:${config.port}`);
   console.log(`  Gallery access code : ${config.accessCode}`);
+  console.log(
+    `  Markup access code  : ${config.markupCode} (+${config.priceMarkupPercent}%)`
+  );
   console.log(`  Admin password      : ${config.adminPassword}`);
 });
