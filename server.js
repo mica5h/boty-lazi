@@ -90,7 +90,7 @@ app.post("/login", (req, res) => {
   }
   if (code === config.markupCode) {
     req.session.gallery = true;
-    req.session.markup = true; // sees prices marked up by priceMarkupPercent
+    req.session.markup = true; // sees prices marked up by priceMarkupAmount
     return res.redirect("/");
   }
   res.redirect("/login?error=1");
@@ -121,12 +121,12 @@ app.get("/admin", requireAdmin, (req, res) => {
 });
 
 // ---- Price markup ----------------------------------------------------------
-// Bump the numeric part of a free-text price string by `percent`, keeping any
-// currency symbols / surrounding text intact. e.g. ("€139", 10) -> "€153".
-// Supports space-grouped thousands and a single . or , decimal separator.
-function markupPrice(price, percent) {
+// Bump the numeric part of a free-text price string by a flat `amount`, keeping
+// any currency symbols / surrounding text intact. e.g. ("139 Kč", 200) ->
+// ("339 Kč"). Supports space-grouped thousands and a single . or , decimal
+// separator.
+function markupPrice(price, amount) {
   const str = String(price ?? "");
-  const factor = 1 + percent / 100;
   const m = str.match(/\d{1,3}(?:[  ]\d{3})+(?:[.,]\d+)?|\d+(?:[.,]\d+)?/);
   if (!m) return str;
   const token = m[0];
@@ -136,15 +136,15 @@ function markupPrice(price, percent) {
   const numeric = Number(token.replace(/[  ]/g, "").replace(",", "."));
   if (!isFinite(numeric)) return str;
   const bumped = decLen
-    ? (numeric * factor).toFixed(decLen).replace(".", decSep)
-    : String(Math.round(numeric * factor));
+    ? (numeric + amount).toFixed(decLen).replace(".", decSep)
+    : String(Math.round(numeric + amount));
   return str.slice(0, m.index) + bumped + str.slice(m.index + token.length);
 }
 
 // Apply the session's price markup (skip for admins, who see real prices).
 function priceView(req, shoe) {
   if (!shoe || !req.session.markup || req.session.admin) return shoe;
-  return { ...shoe, price: markupPrice(shoe.price, config.priceMarkupPercent) };
+  return { ...shoe, price: markupPrice(shoe.price, config.priceMarkupAmount) };
 }
 
 // ---- API -------------------------------------------------------------------
@@ -273,7 +273,7 @@ app.listen(config.port, () => {
   console.log(`botylazi gallery running at http://localhost:${config.port}`);
   console.log(`  Gallery access code : ${config.accessCode}`);
   console.log(
-    `  Markup access code  : ${config.markupCode} (+${config.priceMarkupPercent}%)`
+    `  Markup access code  : ${config.markupCode} (+${config.priceMarkupAmount} Kč)`
   );
   console.log(`  Admin password      : ${config.adminPassword}`);
 });

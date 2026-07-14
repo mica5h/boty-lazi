@@ -8,9 +8,9 @@ export const config = {
   accessCode: process.env.ACCESS_CODE || "BotyLazi",
 
   // Alternative gallery code. Visitors who enter this code see the same
-  // gallery, but every price is marked up by `priceMarkupPercent`.
+  // gallery, but every price is marked up by a flat `priceMarkupAmount` (Kč).
   markupCode: process.env.MARKUP_CODE || "BotyLaziPlus",
-  priceMarkupPercent: Number(process.env.PRICE_MARKUP_PERCENT || 10),
+  priceMarkupAmount: Number(process.env.PRICE_MARKUP_AMOUNT || 200),
 
   // Password to reach the admin panel (upload / edit / delete).
   adminPassword: process.env.ADMIN_PASSWORD || "Lazi123",
