@@ -129,7 +129,8 @@ echo "=== Verify ==="
 verify "$WORK"
 
 node -e '
-const items = require(process.argv[1]);
+const fs = require("fs");
+const items = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
 const bad = items.filter(s => !Array.isArray(s.groups) || s.groups.length === 0);
 console.log(`items: ${items.length}, missing groups: ${bad.length}`);
 bad.forEach(s => console.log("  no groups:", s.id, s.title));
