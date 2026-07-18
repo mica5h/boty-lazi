@@ -24,6 +24,34 @@ function showMsg(text, ok = true) {
 
 let editingId = null;
 
+// ---- Groups ----------------------------------------------------------------
+const groupChecksEl = document.getElementById("groupChecks");
+let GROUPS = [];
+
+async function loadGroups() {
+  const res = await fetch("/api/groups");
+  GROUPS = await res.json();
+  groupChecksEl.innerHTML = GROUPS.map(
+    (g) => `
+      <label class="group-check">
+        <input type="checkbox" name="groups" value="${esc(g.value)}" />
+        <span>${esc(g.label)}</span>
+      </label>`
+  ).join("");
+}
+
+function setGroupChecks(values) {
+  const set = new Set(values || []);
+  groupChecksEl
+    .querySelectorAll('input[name="groups"]')
+    .forEach((cb) => (cb.checked = set.has(cb.value)));
+}
+
+function groupLabel(value) {
+  const g = GROUPS.find((x) => x.value === value);
+  return g ? g.label : value;
+}
+
 async function loadList() {
   const res = await fetch("/api/shoes");
   if (res.status === 401) {
@@ -51,6 +79,13 @@ async function loadList() {
           <span class="muted small">${esc(s.brand || "")} ·
             ${esc(s.size || "?")} · ${esc(s.color || "?")} ·
             ${(s.photos || []).length} fotek</span>
+          ${
+            (s.groups || []).length
+              ? `<span class="group-tags">${s.groups
+                  .map((g) => `<span class="group-tag">${esc(groupLabel(g))}</span>`)
+                  .join("")}</span>`
+              : ""
+          }
         </div>
         <div class="admin-actions">
           <button class="edit" data-id="${esc(s.id)}">Upravit</button>
@@ -79,6 +114,7 @@ async function startEdit(id) {
   form.color.value = s.color || "";
   form.price.value = s.price || "";
   form.description.value = s.description || "";
+  setGroupChecks(s.groups);
 
   formTitle.textContent = "Upravit botu";
   cancelBtn.hidden = false;
@@ -162,4 +198,4 @@ async function del(id) {
   }
 }
 
-loadList();
+loadGroups().then(loadList);

@@ -4,6 +4,21 @@ import { readFile, writeFile, mkdir, rm } from "fs/promises";
 import { existsSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { config } from "./config.js";
+
+const VALID_GROUPS = new Set(config.groups.map((g) => g.value));
+
+// Normalize an incoming groups value (array, single string, or undefined)
+// into a de-duplicated array containing only known group values.
+function sanitizeGroups(input) {
+  const arr = Array.isArray(input) ? input : input == null ? [] : [input];
+  const seen = new Set();
+  for (const raw of arr) {
+    const v = String(raw).trim();
+    if (VALID_GROUPS.has(v)) seen.add(v);
+  }
+  return [...seen];
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const DATA_DIR = path.join(__dirname, "data");
@@ -59,6 +74,7 @@ export async function createShoe(fields) {
     color: fields.color || "",
     price: fields.price || "",
     description: fields.description || "",
+    groups: sanitizeGroups(fields.groups),
     photos: fields.photos || [],
     createdAt: Date.now(),
   };
@@ -75,6 +91,7 @@ export async function updateShoe(id, fields) {
   for (const key of ["title", "brand", "size", "color", "price", "description"]) {
     if (fields[key] !== undefined) shoe[key] = fields[key];
   }
+  if (fields.groups !== undefined) shoe.groups = sanitizeGroups(fields.groups);
   if (fields.photos !== undefined) shoe.photos = fields.photos;
   shoes[idx] = shoe;
   await writeAll(shoes);

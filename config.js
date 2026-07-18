@@ -21,4 +21,13 @@ export const config = {
   // Max photos per shoe and max upload size (bytes).
   maxPhotosPerShoe: 8,
   maxUploadBytes: 8 * 1024 * 1024, // 8 MB per file
+
+  // Item groups (categories). Each item can belong to zero or more of these.
+  // `value` is stored on the record; `label` is shown in the UI.
+  groups: [
+    { value: "panske", label: "Pánské" },
+    { value: "damske", label: "Dámské" },
+    { value: "boty", label: "Boty" },
+    { value: "obleceni", label: "Oblečení" },
+  ],
 };

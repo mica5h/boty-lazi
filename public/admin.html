@@ -30,6 +30,12 @@
           <label>Popis
             <textarea name="description" rows="3"></textarea>
           </label>
+          <fieldset class="groups-field">
+            <legend>Skupiny</legend>
+            <!-- Always submit the field so unchecking all clears groups. -->
+            <input type="hidden" name="groups" value="" />
+            <div id="groupChecks" class="group-checks"></div>
+          </fieldset>
           <label>Fotky (až 8)
             <input type="file" name="photos" accept="image/*" multiple />
           </label>

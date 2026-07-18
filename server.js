@@ -159,6 +159,11 @@ app.get("/api/shoes/:id", requireGallery, async (req, res) => {
   res.json(priceView(req, shoe));
 });
 
+// Available item groups (categories) for filters and the admin form.
+app.get("/api/groups", (req, res) => {
+  res.json(config.groups);
+});
+
 // Tells the admin UI whether the current session is an admin.
 app.get("/api/me", (req, res) => {
   res.json({
@@ -181,6 +186,7 @@ app.post(
       color: req.body.color,
       price: req.body.price,
       description: req.body.description,
+      groups: req.body.groups,
       photos: [],
     });
     // Files were saved under uploads/tmp — move logical refs to the new id.
@@ -218,6 +224,7 @@ app.put(
       color: req.body.color,
       price: req.body.price,
       description: req.body.description,
+      groups: req.body.groups,
       photos,
     });
     res.json(updated);

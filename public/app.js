@@ -1,6 +1,8 @@
 // Gallery front-end: fetch shoes, render cards, lightbox viewer.
 const galleryEl = document.getElementById("gallery");
 const emptyEl = document.getElementById("empty");
+const noMatchEl = document.getElementById("noMatch");
+const filtersEl = document.getElementById("filters");
 
 function esc(s) {
   return String(s ?? "").replace(
@@ -15,6 +17,19 @@ function metaRow(label, value) {
   return `<div class="meta"><span>${esc(label)}</span><b>${esc(value)}</b></div>`;
 }
 
+function groupLabel(value) {
+  const g = groups.find((x) => x.value === value);
+  return g ? g.label : value;
+}
+
+function groupTagsHtml(shoe) {
+  const gs = shoe.groups || [];
+  if (!gs.length) return "";
+  return `<div class="group-tags">${gs
+    .map((g) => `<span class="group-tag">${esc(groupLabel(g))}</span>`)
+    .join("")}</div>`;
+}
+
 function cardHtml(shoe) {
   const photos = shoe.photos || [];
   const cover = photos[0]
@@ -27,6 +42,7 @@ function cardHtml(shoe) {
       <div class="body">
         <h2>${esc(shoe.title)}</h2>
         ${shoe.brand ? `<div class="brand">${esc(shoe.brand)}</div>` : ""}
+        ${groupTagsHtml(shoe)}
         <div class="metas">
           ${metaRow("Velikost", shoe.size)}
           ${metaRow("Barva", shoe.color)}
@@ -38,24 +54,63 @@ function cardHtml(shoe) {
 }
 
 let shoes = [];
+let groups = [];
+let activeFilter = "all";
+
+function renderFilters() {
+  const btn = (value, label) =>
+    `<button class="filter-btn${
+      value === activeFilter ? " active" : ""
+    }" data-group="${esc(value)}">${esc(label)}</button>`;
+  // Only offer groups that actually have items.
+  const used = new Set(shoes.flatMap((s) => s.groups || []));
+  const available = groups.filter((g) => used.has(g.value));
+  if (!available.length) {
+    filtersEl.hidden = true;
+    return;
+  }
+  filtersEl.hidden = false;
+  filtersEl.innerHTML =
+    btn("all", "Vše") + available.map((g) => btn(g.value, g.label)).join("");
+  filtersEl.querySelectorAll(".filter-btn").forEach((b) =>
+    b.addEventListener("click", () => {
+      activeFilter = b.dataset.group;
+      renderFilters();
+      renderGallery();
+    })
+  );
+}
+
+function renderGallery() {
+  const list =
+    activeFilter === "all"
+      ? shoes
+      : shoes.filter((s) => (s.groups || []).includes(activeFilter));
+
+  noMatchEl.hidden = list.length > 0;
+  galleryEl.innerHTML = list.map(cardHtml).join("");
+  galleryEl.querySelectorAll(".card").forEach((el) => {
+    el.addEventListener("click", () => openLightbox(el.dataset.id));
+  });
+}
 
 async function load() {
-  const [meRes, shoesRes] = await Promise.all([
+  const [meRes, shoesRes, groupsRes] = await Promise.all([
     fetch("/api/me"),
     fetch("/api/shoes"),
+    fetch("/api/groups"),
   ]);
   const me = await meRes.json();
   if (me.admin) document.getElementById("adminLink").hidden = false;
 
+  groups = await groupsRes.json();
   shoes = await shoesRes.json();
   if (!shoes.length) {
     emptyEl.hidden = false;
     return;
   }
-  galleryEl.innerHTML = shoes.map(cardHtml).join("");
-  galleryEl.querySelectorAll(".card").forEach((el) => {
-    el.addEventListener("click", () => openLightbox(el.dataset.id));
-  });
+  renderFilters();
+  renderGallery();
 }
 
 // ---- Lightbox --------------------------------------------------------------
@@ -73,6 +128,7 @@ function openLightbox(id) {
   lbInfo.innerHTML = `
     <h2>${esc(shoe.title)}</h2>
     ${shoe.brand ? `<div class="brand">${esc(shoe.brand)}</div>` : ""}
+    ${groupTagsHtml(shoe)}
     <div class="metas">
       ${metaRow("Velikost", shoe.size)}
       ${metaRow("Barva", shoe.color)}
